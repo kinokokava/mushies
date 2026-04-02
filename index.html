@@ -1,1 +1,488 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Mushroom Thinking Traps</title>\n</head>\n<body>\n    <header>\n        <h1>Welcome to the Mushroom Thinking Traps App</h1>\n    </header>\n    <main>\n        <section>\n            <h2>About</h2>\n            <p>This app helps identify and overcome common thinking traps related to mushrooms.</p>\n        </section>\n        <section>\n            <h2>Usage</h2>\n            <p>To use the app, navigate through the various sections to learn about thinking traps.</p>\n        </section>\n    </main>\n    <footer>\n        <p>&copy; 2026 Mushroom Thinking Traps, All Rights Reserved.</p>\n    </footer>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mushroom Thinking Traps</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5e6ff 0%, #ffe6f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #6b4c9a;
+            margin-bottom: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #7d5ba8;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: #5a3f85;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: #4a2f6f;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #7d5ba8;
+            border-radius: 25px;
+            font-size: 1em;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            height: 350px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card-container:hover .card {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6f0 100%);
+            color: #6b4c9a;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #d4a5ff 0%, #ffb3d9 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .mushroom-illustration {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .trap-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .trap-definition {
+            font-size: 0.95em;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .collect-btn {
+            padding: 8px 16px;
+            background: #25a25c;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .collect-btn:hover {
+            background: #1d7a47;
+            transform: scale(1.05);
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .collection-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .collection-item h3 {
+            color: #6b4c9a;
+            margin-bottom: 10px;
+        }
+
+        .collection-item p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .no-items {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                gap: 5px;
+            }
+
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍄 Mushroom Thinking Traps</h1>
+        <p>Collect cute mushrooms and discover your thinking patterns</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('deck')">Card Deck</button>
+        <button class="tab-btn" onclick="switchTab('collection')">My Collection</button>
+        <button class="tab-btn" onclick="switchTab('search')">Search</button>
+    </div>
+
+    <!-- Card Deck Tab -->
+    <div id="deck" class="tab-content active">
+        <div class="search-box">
+            <input type="text" id="deckSearch" placeholder="Search cards..." onkeyup="filterDeckCards()">
+        </div>
+        <div id="cardDeck" class="cards-grid"></div>
+    </div>
+
+    <!-- Collection Tab -->
+    <div id="collection" class="tab-content">
+        <h2 style="text-align: center; color: #6b4c9a; margin-bottom: 30px;">Your Collection</h2>
+        <div id="collectionDisplay"></div>
+    </div>
+
+    <!-- Search Tab -->
+    <div id="search" class="tab-content">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search thinking traps..." onkeyup="searchCards()">
+        </div>
+        <div id="searchResults" class="cards-grid"></div>
+    </div>
+
+    <script>
+        // Thinking trap data with cute mushroom emojis
+        const thinkingTraps = [
+            {
+                id: 1,
+                name: "Confirmation Bias",
+                emoji: "🍄",
+                definition: "Seeking out information that confirms what you already believe while ignoring contradicting evidence."
+            },
+            {
+                id: 2,
+                name: "Catastrophizing",
+                emoji: "☠️🍄",
+                definition: "Assuming the worst possible outcome will happen without evidence."
+            },
+            {
+                id: 3,
+                name: "Black & White Thinking",
+                emoji: "⚫⚪🍄",
+                definition: "Seeing situations in extremes with no middle ground or nuance."
+            },
+            {
+                id: 4,
+                name: "Mind Reading",
+                emoji: "🧠🍄",
+                definition: "Assuming you know what others are thinking without asking them."
+            },
+            {
+                id: 5,
+                name: "Perfectionism",
+                emoji: "✨🍄",
+                definition: "Demanding perfection from yourself or others, making it impossible to feel satisfied."
+            },
+            {
+                id: 6,
+                name: "Impostor Syndrome",
+                emoji: "👤🍄",
+                definition: "Doubting your accomplishments and feeling like a fraud despite evidence of success."
+            },
+            {
+                id: 7,
+                name: "Procrastination Trap",
+                emoji: "⏰🍄",
+                definition: "Delaying action or decisions, often due to anxiety or perfectionism."
+            },
+            {
+                id: 8,
+                name: "Comparison Trap",
+                emoji: "⚖️🍄",
+                definition: "Constantly comparing yourself to others, leading to inadequacy and dissatisfaction."
+            },
+            {
+                id: 9,
+                name: "Overgeneralization",
+                emoji: "🔄🍄",
+                definition: "Taking one negative event and treating it as a never-ending pattern."
+            },
+            {
+                id: 10,
+                name: "Emotional Reasoning",
+                emoji: "💔🍄",
+                definition: "Believing something is true because it feels true, regardless of evidence."
+            }
+        ];
+
+        // Initialize the app
+        function init() {
+            renderCardDeck();
+            displayCollection();
+        }
+
+        // Render the card deck
+        function renderCardDeck() {
+            const cardDeck = document.getElementById('cardDeck');
+            cardDeck.innerHTML = '';
+            
+            thinkingTraps.forEach(trap => {
+                const cardHTML = createCardHTML(trap);
+                cardDeck.innerHTML += cardHTML;
+            });
+        }
+
+        // Create card HTML
+        function createCardHTML(trap) {
+            return `
+                <div class="card-container">
+                    <div class="card">
+                        <div class="card-front">
+                            <div class="mushroom-illustration">${trap.emoji}</div>
+                            <div class="trap-name">${trap.name}</div>
+                            <small>Hover to flip</small>
+                        </div>
+                        <div class="card-back">
+                            <div class="trap-definition">${trap.definition}</div>
+                            <button class="collect-btn" onclick="collectCard(${trap.id}, event)">Collect This Card</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Collect a card
+        function collectCard(trapId, event) {
+            event.stopPropagation();
+            
+            const trap = thinkingTraps.find(t => t.id === trapId);
+            if (!trap) return;
+
+            const collection = JSON.parse(localStorage.getItem('mushieCollection')) || [];
+            
+            const collectionEntry = {
+                id: Date.now(),
+                trapId: trapId,
+                trapName: trap.name,
+                emoji: trap.emoji,
+                collectedAt: new Date().toISOString(),
+                timeOfDay: getTimeOfDay(),
+                situation: prompt("What situation triggered this thinking trap? (optional)") || "Not specified"
+            };
+
+            collection.push(collectionEntry);
+            localStorage.setItem('mushieCollection', JSON.stringify(collection));
+
+            alert(`🎉 You collected ${trap.name}!`);
+            displayCollection();
+        }
+
+        // Get time of day
+        function getTimeOfDay() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "Morning";
+            if (hour < 17) return "Afternoon";
+            if (hour < 21) return "Evening";
+            return "Night";
+        }
+
+        // Display collection
+        function displayCollection() {
+            const collectionDisplay = document.getElementById('collectionDisplay');
+            const collection = JSON.parse(localStorage.getItem('mushieCollection')) || [];
+
+            if (collection.length === 0) {
+                collectionDisplay.innerHTML = '<div class="no-items">No mushrooms collected yet. Start by collecting cards from the deck!</div>';
+                return;
+            }
+
+            let html = '<div class="collection-grid">';
+            collection.forEach(entry => {
+                const date = new Date(entry.collectedAt);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                html += `
+                    <div class="collection-item">
+                        <div style="font-size: 2em; text-align: center; margin-bottom: 10px;">${entry.emoji}</div>
+                        <h3>${entry.trapName}</h3>
+                        <p><strong>Collected:</strong> ${dateStr}</p>
+                        <p><strong>Time:</strong> ${entry.timeOfDay}</p>
+                        <p><strong>Situation:</strong> ${entry.situation}</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            collectionDisplay.innerHTML = html;
+        }
+
+        // Filter deck cards
+        function filterDeckCards() {
+            const searchTerm = document.getElementById('deckSearch').value.toLowerCase();
+            const filtered = thinkingTraps.filter(trap => 
+                trap.name.toLowerCase().includes(searchTerm) ||
+                trap.definition.toLowerCase().includes(searchTerm)
+            );
+
+            const cardDeck = document.getElementById('cardDeck');
+            cardDeck.innerHTML = '';
+            filtered.forEach(trap => {
+                cardDeck.innerHTML += createCardHTML(trap);
+            });
+        }
+
+        // Search cards
+        function searchCards() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const searchResults = document.getElementById('searchResults');
+            
+            if (!searchTerm) {
+                searchResults.innerHTML = '<div class="no-items">Enter a search term to find thinking traps.</div>';
+                return;
+            }
+
+            const filtered = thinkingTraps.filter(trap => 
+                trap.name.toLowerCase().includes(searchTerm) ||
+                trap.definition.toLowerCase().includes(searchTerm)
+            );
+
+            if (filtered.length === 0) {
+                searchResults.innerHTML = '<div class="no-items">No thinking traps found matching your search.</div>';
+                return;
+            }
+
+            searchResults.innerHTML = '';
+            filtered.forEach(trap => {
+                searchResults.innerHTML += createCardHTML(trap);
+            });
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Refresh collection if viewing that tab
+            if (tabName === 'collection') {
+                displayCollection();
+            }
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>
